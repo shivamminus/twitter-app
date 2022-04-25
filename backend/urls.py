@@ -1,4 +1,4 @@
-from __main__ import app, client
+from __main__ import app, client, post_db
 from flask import Flask, request, jsonify
 import json
 import ast
@@ -50,11 +50,13 @@ def profile():
 		return jsonify({'msg': 'Profile not found'}), 404
 
 @app.route('/', methods = ['GET'])
+@jwt_required()
 def retrieveAll():
+    current_user = get_jwt_identity()
     print("reached get method: /get")
     data = {}
     a=0
-    result = client["mytestdb"]["collection1"].find()
+    result = post_db.find()
     for i in result:
         data[a] = [str(item) for item in i.items()]
         a=a+1
@@ -62,13 +64,15 @@ def retrieveAll():
 
 
 
-@app.route('/postData', methods = ['POST'])
+@app.route('/post_tweet', methods = ['POST', 'PUT'])
+@jwt_required()
 def postData():
+    current_user = get_jwt_identity()
     # currentCollection = mongo.db.col1
     data = request.data.decode()
     data = ast.literal_eval(data)
     print(type(data))
-    inserted_id = client["mytestdb"]["collection1"].insert_one(data)
+    inserted_id = post_db.insert_one(data)
     return {"objectID":str(inserted_id)}
 
 

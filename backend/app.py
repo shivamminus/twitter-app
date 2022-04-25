@@ -12,6 +12,7 @@ app = Flask(__name__)
 import mongoconn
 
 client = mongoconn.retrieve_client()
+post_db = mongoconn.retrieve_postdb_client()
 import urls
 
 if __name__ == '__main__':

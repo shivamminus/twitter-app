@@ -12,3 +12,12 @@ def retrieve_client():
     result = client["mytestdb"]["collection1"].find()
     print("DB CONNECTED")
     return client
+
+
+def retrieve_postdb_client():
+    uri = 'mongodb+srv://' + username + ':' + password + '@' + cluster + '/?authSource=' + authSource + '&authMechanism='+authMechanism  +'&retryWrites=true&w=majority'
+    client = pymongo.MongoClient(uri)
+    post_db =client["mytestdb"]["post"]
+    print(client["mytestdb"]["post"].find())
+    print("POST DB CONNECTED")
+    return post_db
